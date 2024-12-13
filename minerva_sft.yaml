@@ -1,0 +1,74 @@
+base_model: sapienzanlp/Minerva-7B-base-v1.0
+tokenizer_type: AutoTokenizer
+model_type: AutoModelForCausalLM
+
+gpu_memory_limit: 80GiB
+
+strict: false
+
+plugins:
+  - axolotl.integrations.liger.LigerPlugin
+liger_fused_linear_cross_entropy: true  
+  
+chat_template: chatml
+datasets:
+  - path: mii-llm/omnia-v5-cleaned_high_score_v2
+    type: chat_template
+    field_messages: conversations
+    message_field_role: from
+    message_field_content: value
+    # roles:
+    #   user: ["human"]
+    #   assistant: ["gpt"]
+    #   system: ["system"]
+
+    # roles_to_train: ["gpt"]
+    # train_on_eos: turn
+dataset_prepared_path: /home/ecuser/samu/axolotl/last_run_prepared
+val_set_size: 0.0005
+output_dir: /home/ecuser/samu/axolotl/minerva_out
+save_safetensors: true  # saving final sharded dict may not work with safetensors
+
+wandb_project: minerva
+wandb_entity: mii-llm
+wandb_name: 1_2e_2.0e-6
+
+sequence_len: 4096
+sample_packing: true
+pad_to_sequence_len: true
+
+gradient_accumulation_steps: 8
+micro_batch_size: 14
+num_epochs: 2
+optimizer: paged_adamw_8bit
+lr_scheduler: cosine
+learning_rate: 2.0e-6
+
+train_on_inputs: false
+group_by_length: false
+bf16: auto
+tf32: true
+
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: false
+logging_steps: 1
+flash_attention: true
+
+auto_resume_from_checkpoints: true
+
+warmup_steps: 585
+evals_per_epoch: 20
+saves_per_epoch: 100
+save_total_limit: 3
+weight_decay: 0.05
+max_grad_norm: 0.03
+
+special_tokens:
+  pad_token: <|im_end|>
+  eos_token: <|im_end|>
+  bos_token: <|im_start|>
+
+tokens:
+  - "<|im_start|>"
+  - "<|im_end|>"
