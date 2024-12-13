@@ -52,6 +52,8 @@ pip install flash-attn --no-build-isolation
 
 per installare git
 e git clone https://github.com/axolotl-ai-cloud/axolotl.git
+modificare evaluate==0.4.3 nei requirements di axolotl per far andare bench eval
+
 cd axolotl
 pip3 install packaging ninja
 pip3 install wheel
@@ -60,6 +62,7 @@ pip3 install --no-build-isolation -e '.[flash-attn,deepspeed]'
 
 ora creiamo una cartella in example chiamata minerva e ci mettiamo la config fornita dalla guida e poi lanciamo da axololt
 
+
  CUDA_VISIBLE_DEVICES="" axolotl preprocess examples/minerva/minerva.yml 
 
 poi mi loggherei su hf se dataset o modello sono privati con huggingface-cli login e poi ottimizziamo il training su una gpu facendo delle prove con
@@ -67,6 +70,8 @@ poi mi loggherei su hf se dataset o modello sono privati con huggingface-cli log
  CUDA_VISIBLE_DEVICES="0" axolotl train examples/minerva/minerva.yml  
 
  lavoriamo solo con 1 gpu
+
+
 
 
 
